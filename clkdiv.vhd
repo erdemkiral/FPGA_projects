@@ -30,8 +30,8 @@ end clkdiv;
 
 architecture Behavioral of clkdiv is
 
-constant c_frstclklim   : integer := c_clkfreq/c_clk2freq;  -- first frequency is set to 1 MHz,1 microseconds
-constant c_scndclklim   : integer := c_clkfreq/c_clk3freq;  -- first frequency is set to 500 kHz ,2 microseconds
+constant c_frstclklim   : integer := c_clkfreq/c_clk2freq;  -- first frequency is set to 25 MHz,40 ns
+constant c_scndclklim   : integer := c_clkfreq/c_clk3freq;  -- first frequency is set to 10 MHz ,100 ns 
 
 signal   frstclk     : integer range 0 to c_clkfreq/c_clk2freq := 0 ;
 signal   scndclk     : integer range 0 to c_clkfreq/c_clk3freq := 0 ;
