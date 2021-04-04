@@ -19,10 +19,10 @@ generic(
 port ( 
 		  clk  : in std_logic;
 		  en   : in std_logic;
-	increment  : in std_logic;
-	decrement  : in std_logic;
-	    reset  : in std_logic;
-	    data1  : out std_logic_vector (3 downto 0);
+	    increment  : in std_logic;
+	    decrement  : in std_logic;
+	        reset  : in std_logic;
+	        data1  : out std_logic_vector (3 downto 0);
 		data2  : out std_logic_vector (3 downto 0)
 	
 );
