@@ -1,7 +1,8 @@
 -- Project includes following features
 -- Making 25 and 10 Mhz clock divider by using 50 Mhz FPGA clock 
--- Depending on divided clock frequencies it has 2 up and down counter and also has synchronous reset and enable mod.
+-- Depending on divided clock frequencies it has 2 up and down counters and also synchronous reset and enable mod.
 -- If you would like to change output frequencies, it is enough to change generic parameters.
+-- 
 -- If you see any mistakes ,feel free to contact with me via e-mail at erdemkiral@gmail.com.
 
 library IEEE;
@@ -11,10 +12,9 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity clkdiv is
 generic(
-		c_clkfreq    : integer := 50_000_000; -- 20 ns
-		c_clk2freq   : integer := 25_000_000; -- 40 ns
-		c_clk3freq   : integer := 10_000_000; -- 100 ns 
-
+		c_clkfreq    : integer := 50_000_000; -- 20 ns main frequency
+		c_clk2freq   : integer := 25_000_000; -- 40 ns divided frequency 1
+		c_clk3freq   : integer := 10_000_000; -- 100 ns divided frequency 2
 );
 port ( 
 		  clk  : in std_logic;
