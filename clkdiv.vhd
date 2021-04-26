@@ -1,5 +1,5 @@
 -- Project includes following features
--- Making 25 and 10 Mhz clock divider by using 50 Mhz FPGA clock 
+-- Making 25 and 10 Mhz clock frequency by using 50 Mhz FPGA clock 
 -- Depending on divided clock frequencies it has 2 up and down counters and also synchronous reset and enable mod.
 -- If you would like to change output frequencies, it is enough to change generic parameters.
 -- 
