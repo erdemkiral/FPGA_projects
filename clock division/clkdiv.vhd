@@ -12,9 +12,9 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity clkdiv is
 generic(
-		c_clkfreq    : integer := 50_000_000; -- 20 ns main frequency
-		c_clk2freq   : integer := 25_000_000; -- 40 ns divided frequency 1
-		c_clk3freq   : integer := 10_000_000; -- 100 ns divided frequency 2
+		c_clkfreq    : integer := 50_000_000; -- 20 ns main  period
+		c_clk2freq   : integer := 25_000_000; -- 40 ns divided  period 1
+		c_clk3freq   : integer := 10_000_000; -- 100 ns divided period 2
 );
 port ( 
 		  clk  : in std_logic;
@@ -30,7 +30,7 @@ end clkdiv;
 
 architecture Behavioral of clkdiv is
 
-constant c_frstclklim   : integer := c_clkfreq/c_clk2freq;  -- first frequency is set to 25 MHz,40 ns
+constant c_frstclklim   : integer := c_clkfreq/c_clk2freq;  -- first frequency is set to 25 MHz ,40 ns
 constant c_scndclklim   : integer := c_clkfreq/c_clk3freq;  -- secondfrequency is set to 10 MHz ,100 ns 
 
 signal   frstclk     : integer range 0 to c_clkfreq/c_clk2freq := 0 ;
