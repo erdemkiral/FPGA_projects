@@ -5,9 +5,9 @@ use ieee.numeric_std.all;
 
 entity alu8bit is
 port ( 
-		data1_i  : in std_logic_vector (7 downto 0);
-		data2_i  : in std_logic_vector (7 downto 0);
-	    optype_i : in std_logic_vector (2 downto 0);
+	    data1_i  : in  std_logic_vector (7 downto 0);
+	    data2_i  : in  std_logic_vector (7 downto 0);
+	    optype_i : in  std_logic_vector (2 downto 0);
 	    data_o   : out std_logic_vector(7 downto 0)
 );
 end alu8bit;
