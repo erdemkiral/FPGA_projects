@@ -62,16 +62,16 @@ substract <=   positive_sign & std_logic_vector(data2_i_mag-data1_i_mag) when (d
 	       positive_sign & std_logic_vector(data2_i_mag+data1_i_mag) when (data1_i_signbit = '0' and data2_i_signbit = '1') and (data1_i_mag = data2_i_mag) else
 	       x"00"; 
 
-
-data_o <=  std_logic_vector(sum) 				when optype_i = "000" else 
-			substract 				when optype_i = "001" else 
-			not data1_i				when optype_i = "010" else 
-			data1_i	and data2_i			when optype_i = "011" else 
-			data1_i	or data2_i			when optype_i = "100" else 
-			data1_i	xor data2_i			when optype_i = "101" else
-			data1_i(7 downto 1)	& '0'		when optype_i = "110" else 		   
-			'0' &	data1_i(7 downto 1)		when optype_i = "111" else 		   
-		    	x"00";
+        
+data_o <=    sum		                when optype_i = "000" else 
+	     substract 			        when optype_i = "001" else 
+	     not data1_i			when optype_i = "010" else 
+	     data1_i	and data2_i		when optype_i = "011" else 
+	     data1_i	or data2_i		when optype_i = "100" else 
+	     data1_i	xor data2_i		when optype_i = "101" else
+	     data1_i(7 downto 1)	& '0'	when optype_i = "110" else 		   
+	     '0' &	data1_i(7 downto 1)	when optype_i = "111" else 		   
+	      x"00";
 		   
 
 
