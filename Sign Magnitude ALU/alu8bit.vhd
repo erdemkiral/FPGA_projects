@@ -1,3 +1,11 @@
+-- Project includes following features.
+-- Parameterized 2 input and output data size.
+-- Addition,substraction,multiplication by 2,divison by 2, and,or and xor operations.
+-- Comparator which is used to determine equality of sign bit and magnitude bits.
+
+
+
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
