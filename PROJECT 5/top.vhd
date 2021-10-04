@@ -212,10 +212,10 @@ if(rising_edge(clk)) then
 			
 				if(databuff(8*6-1 downto 4*8) = x"ABCD") then 
 					
-					if(databuff(4*8-1 downto 3*8) = x"11") then 
+					if(databuff(4*8-1 downto 3*8) = x"11") then -- write 
 						state <= S_WRITE;
 						wea <= '1';
-					elsif(databuff(4*8-1 downto 3*8) = x"22") then
+					elsif(databuff(4*8-1 downto 3*8) = x"22") then -- read
 						state <= S_READ;
 					end if;
 				else 
