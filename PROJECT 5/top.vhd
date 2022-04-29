@@ -34,8 +34,8 @@ entity top is
 generic(
 	RAM_DEPTH 		: integer := 256;      			 	  -- Specify RAM depth (number of entries)
     RAM_WIDTH 		: integer := 8;        			 	  -- Specify RAM data width                      
-    RAM_PERFORMANCE : string := "LOW_LATENCY";   		  -- Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-	C_RAM_TYPE 		: string 	:= "block" ;			  -- Select "block" or "distributed" 
+    RAM_PERFORMANCE : string  := "LOW_LATENCY";   		  -- Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
+	C_RAM_TYPE 		: string  := "block" ;			  -- Select "block" or "distributed" 
  	c_clkfreq  		: integer := 100_000_000;
 	c_baudrate 		: integer := 115_200;
 	c_stopbitcount  : integer := 2
@@ -46,7 +46,6 @@ port (
 		tx  : out std_logic
 );
 end top;
-
 
 architecture Behavioral of top is
 
@@ -111,8 +110,8 @@ signal addr  :  std_logic_vector((clogb2(RAM_DEPTH)-1) downto 0) := (others => '
 signal wea   :  std_logic := '0'; 
 signal douta :  std_logic_vector(RAM_WIDTH-1 downto 0) ;
 
-
-type states is (S_RECEIVE,S_WRITE,S_READ,S_RESPONSE,S_START,S_MODULUS,S_TRANSMIT);
+-- PROGRAM SIGNALS
+type states is (S_RECEIVE,S_START,S_WRITE,S_READ,S_RESPONSE,S_MODULUS,S_TRANSMIT);
 signal state : states;
 
 signal databuff : std_logic_vector(6*8-1 downto 0) := (others => '0');
@@ -120,6 +119,7 @@ signal checksumreg : std_logic_vector(11 downto 0) := (others => '0');
 
 signal cntr 	: integer range 0 to 6 := 6 ;
 signal bytecntr :  integer range 0 to 6 := 0 ;
+
 
 begin
 
@@ -174,8 +174,10 @@ if(rising_edge(clk)) then
 	
 		when S_RECEIVE  	=> 
 				
+				tx_start <= '0';
 				wea <= '0';
 				cntr <= 6;
+				
 				if(rx_done = '1') then 
 					databuff(8*1-1 downto 8*0) <= data;
 					databuff(8*6-1 downto 8*1) <= databuff(8*5-1 downto 8*0);
@@ -192,18 +194,21 @@ if(rising_edge(clk)) then
 							cntr <= 6;
 							checksumreg <= (others => '0');
 						else 
-							state <= S_TRANSMIT;
 							databuff <= x"abcdee000066";
-							tx_start <= '1';
-							tx_data <= databuff(6*8-1 downto 5*8);
 							bytecntr <= 0;
 							cntr <= 6;
+							state <= S_TRANSMIT;
+							tx_data <= databuff(6*8-1 downto 5*8);
+							tx_start <= '1';
 						end if;
+						
 					
 					else
 						checksumreg <= checksumreg + databuff (cntr*8-1 downto (cntr-1)*8);
 						cntr <= cntr - 1;
 					end if;
+					
+					
 				else
 					state <= S_RECEIVE ;
 				end if;
@@ -222,7 +227,6 @@ if(rising_edge(clk)) then
 					state <= S_START;
 				end if;
 
-			
 		when S_WRITE 	=> 
 		
 				wea  <= '1';
@@ -239,7 +243,7 @@ if(rising_edge(clk)) then
 		
 		when S_RESPONSE => 
 		
-	
+				wea <= '0';
 				if(databuff(8*4-1 downto 8*3) = x"11") then 
 				
 					databuff(8*4-1 downto 8*3) <= x"33";  -- write done
@@ -255,33 +259,44 @@ if(rising_edge(clk)) then
 		when S_MODULUS => 	
 		
 				if (cntr = 1) then 
+					cntr <= 5;
 					databuff(1*8-1 downto 0) <= checksumreg(7 downto 0);
 					checksumreg <= (others => '0');
 					state <= S_TRANSMIT;
-					cntr <= 6;
+					tx_start <= '1';
+					tx_data <= databuff(6*8-1 downto 5*8);
+
 				else 
 					checksumreg <= databuff(cntr*8-1 downto (cntr-1)*8) + checksumreg ;
 					cntr <= cntr -1 ;
 				end if;
 		
 		when S_TRANSMIT => 
-		
+
+			
 			if (cntr = 0) then 
-					if(tx_done_tick = '1') then
+					tx_start <= '0';
+					if(tx_done_tick = '1') then 
+						checksumreg <= (others => '0');
 						tx_start <= '0';
 						databuff <= (others => '0');
 						tx_data <= (others => '0');
 						cntr <= 6;
 						state <= S_RECEIVE;
-					end if;
+					end if;	
+						
 			else 
-				tx_data <= databuff (cntr*8-1 downto (cntr-1)*8);
-				tx_start <= '1';
+				
+				tx_data <= databuff(cntr*8 -1 downto (cntr-1)*8);
 				if(tx_done_tick = '1') then
 						cntr <= cntr -1 ;
 				end if;
 		
 			end if;
+			
+			
+			
+			
 	end case;
 
 end if;
